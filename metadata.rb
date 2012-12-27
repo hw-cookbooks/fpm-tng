@@ -1,6 +1,6 @@
 name 'fpm-tng'
-maintainer 'Chris Roberts'
-maintainer_email 'chrisroberts.code@gmail.com'
+maintainer 'Heavy Water'
+maintainer_email 'support@hw-ops.com'
 description 'FPM for Chef'
 license 'Apache 2.0'
 

@@ -9,6 +9,7 @@ attribute :input_args, :kind_of => [String,Array], :default => '.'
 attribute :input_type, :kind_of => String, :default => 'dir'
 attribute :output_type, :kind_of => String, :required => true
 attribute :chdir, :kind_of => String
+attribute :package_name, :kind_of => String
 
 # FPM args
 

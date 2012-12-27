@@ -1,5 +1,6 @@
 def load_current_resource
   new_resource.version '1.0' unless new_resource.version
+  new_resource.package_name new_resource.name unless new_resource.package_name
   unless(new_resource.package)
     new_resource.package ::File.join(node[:fpm_tng][:package_dir], "#{new_resource.name}-#{new_resource.version}.#{new_resource.output_type}")
   end
@@ -14,7 +15,7 @@ action :create do
     fpm << "-s #{new_resource.input_type}"
     fpm << "-t #{new_resource.output_type}"
     fpm << "-C #{new_resource.chdir}" if new_resource.chdir
-    fpm << "-n #{new_resource.name}"
+    fpm << "-n #{new_resource.package_name}"
 
     [FpmTng::STRINGS, FpmTng::NUMERICS].flatten.compact.each do |str|
       if(new_resource.send(str))

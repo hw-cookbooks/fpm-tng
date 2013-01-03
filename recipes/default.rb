@@ -6,7 +6,7 @@ begin
       node.default[:fpm_tng][:gem] = File.join(node.languages.ruby.bin_dir, 'gem')
     end
     action :nothing
-    subscribes 'ohai[ruby]', :immediately
+    subscribes :create, 'ohai[ruby]', :immediately
   end
 rescue Chef::Exceptions::ResourceNotFound
   Chef::Log.warn 'No ohai ruby reload found.'

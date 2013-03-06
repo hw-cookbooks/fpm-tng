@@ -3,6 +3,7 @@ default_action :create
 
 # Helper stuffs
 attribute :reprepro, :kind_of => [TrueClass,FalseClass], :default => false
+attribute :repository, :kind_of => String
 attribute :creates, :kind_of => String
 
 attribute :input_args, :kind_of => [String,Array], :default => '.'

@@ -24,6 +24,7 @@ action :create do
         gem_fix_name false
         input_args spec.name
         reprepro new_resource.reprepro
+        repository new_resource.repository if new_resource.repository
       end
       f.run_action(:create)
       updated ||= f.updated_by_last_action?

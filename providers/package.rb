@@ -47,14 +47,23 @@ action :create do
       command fpm.join(' ')
       creates new_resource.package
     end
-    e.run_action(:run)
-    if(e.updated_by_last_action?)
-      new_resource.updated_by_last_action(true)
-      if(new_resource.reprepro)
-        reprepro_deb new_resource.name do
-          package new_resource.package
-        end
-      end
+  end
+  if(new_resource.reprepro)
+    r = reprepro_deb new_resource.name do
+      package new_resource.package
+    end
+  end
+  if(new_resource.repository)
+    r = repository_package new_resource.package do
+      repository new_resource.repository
+    end
+  end
+  ruby_block "FPM resource update check: #{new_resource.name}" do
+    block do
+      new_resource.updated_by_last_action(
+        (e && e.updated_by_last_action?) ||
+        (r && r.updated_by_last_action?)
+      )
     end
   end
 end

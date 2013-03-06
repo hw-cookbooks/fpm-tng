@@ -1,3 +1,7 @@
+## v0.1.3
+* Add integrated support for repository
+* Update change check within LWRP
+
 ## v0.1.2
 * Add missing action on resource subscription
 

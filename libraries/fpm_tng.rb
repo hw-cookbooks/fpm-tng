@@ -19,6 +19,6 @@ module FpmTng
   TRUE_FALSE = %w(
     template_scripts gem_fix_name gem_fix_dependencies 
     deb_ignore_iteration_in_dependencies python_fix_name
-    python_fix_dependencies pear_channel_update
+    python_fix_dependencies pear_channel_update auto_depends
   )
 end

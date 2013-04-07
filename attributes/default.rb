@@ -4,3 +4,7 @@ default[:fpm_tng][:build_dir] = '/opt/fpm-build'
 default[:fpm_tng][:package_dir] = '/opt/fpm-pkgs'
 default[:fpm_tng][:exec] = File.join(node.languages.ruby.bin_dir, 'fpm')
 default[:fpm_tng][:gem] = node.languages.ruby.gem_bin
+default[:fpm_tng][:bundle][:enable] = true
+default[:fpm_tng][:bundle][:directory] = '/opt/fpm-bundled'
+default[:fpm_tng][:bundle][:branch] = 'master'
+default[:fpm_tng][:bundle][:git_uri] = 'https://github.com/jordansissel/fpm.git'

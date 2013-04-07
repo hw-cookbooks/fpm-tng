@@ -1,5 +1,8 @@
 
 action :create do
+
+  ignore_attrs = %w(input_type output_type version input_args gem_fix_name)
+  
   require 'rubygems/dependency_installer'
   args = [new_resource.name, new_resource.version].compact
   dep_installer = Gem::DependencyInstaller.new
@@ -12,25 +15,30 @@ action :create do
   resource_generator = lambda do |base_spec|
     base_spec.runtime_dependencies.each do |dep|
       spec = dep_installer.find_gems_with_sources(dep).last.first
-      s_name = [new_resource.gem_package_name_prefix, spec.name].join('-')
+      deps = spec.runtime_dependencies.map do |s|
+        resource_generator.call(dep_installer.find_gems_with_sources(s).last.first)
+      end
+
+      s_name = [new_resource.gem_package_name_prefix, new_resource.package_name_suffix, spec.name].compact.join('-')
+
       next if pk_list.include?(s_name)
       pk_list << s_name
       f = fpm_tng_package s_name do
         input_type 'gem'
         output_type 'deb'
-        gem_gem new_resource.gem_gem
-        version spec.version.to_s
-        gem_package_name_prefix new_resource.gem_package_name_prefix
         gem_fix_name false
         input_args spec.name
-        reprepro new_resource.reprepro
-        repository new_resource.repository if new_resource.repository
+        version spec.version.to_s
+        (FpmTng::STRINGS + FpmTng::NUMERICS + FpmTng::STRING_ARRAYS + FpmTng::TRUE_FALSE).each do |attr|
+          next if ignore_attrs.include?(attr)
+          if(new_resource.send(attr))
+            self.send(attr, new_resource.send(attr))
+          end
+        end
       end
       f.run_action(:create)
       updated ||= f.updated_by_last_action?
-      spec.runtime_dependencies.each do |s|
-        resource_generator.call(dep_installer.find_gems_with_sources(s).last.first)
-      end
+      [spec.name, spec.version]
     end
   end
   resource_generator.call(base)

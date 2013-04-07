@@ -12,9 +12,34 @@ rescue Chef::Exceptions::ResourceNotFound
   Chef::Log.warn 'No ohai ruby reload found.'
 end
 
-node[:fpm_tng][:install][:gems].each do |fpm_gem|
-  gem_package fpm_gem do
-    gem_binary node[:fpm_tng][:gem]
+unless(node[:fpm_tng][:bundle][:enable])
+  node[:fpm_tng][:install][:gems].each do |fpm_gem|
+    gem_package fpm_gem do
+      gem_binary node[:fpm_tng][:gem]
+    end
+  end
+else
+  gem_package 'bundler'
+  package 'git'
+  
+  directory node[:fpm_tng][:bundle][:directory] do
+    recursive true
+  end
+
+  file File.join(node[:fpm_tng][:bundle][:directory], 'Gemfile') do
+    mode 0644
+    content "source 'https://rubygems.org'\ngem 'fpm', :git => '#{node[:fpm_tng][:bundle][:git_uri]}', :branch => '#{node[:fpm_tng][:bundle][:branch]}'\n"
+    notifies :delete, "file[#{File.join(node[:fpm_tng][:bundle][:directory], 'Gemfile.lock')}]", :immediately
+  end
+
+  file File.join(node[:fpm_tng][:bundle][:directory], 'Gemfile.lock') do
+    action :nothing
+  end
+  
+  execute 'Install FPM bundle' do
+    command 'bundle install --binstubs --path=./vendor'
+    cwd node[:fpm_tng][:bundle][:directory]
+    creates File.join(node[:fpm_tng][:bundle][:directory], 'Gemfile.lock')
   end
 end
 

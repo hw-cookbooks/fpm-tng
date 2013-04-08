@@ -1,3 +1,9 @@
+## v0.1.4
+* Add some missing fpm options
+* Let gemdeps LWRP do dependency resolution to provide proper package names
+* Allow all package resource attributes be applicable to gemdeps
+* Provide option to install via git repository using bundler
+
 ## v0.1.3
 * Add integrated support for repository
 * Update change check within LWRP

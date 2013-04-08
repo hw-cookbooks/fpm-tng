@@ -4,7 +4,7 @@ maintainer_email 'support@hw-ops.com'
 description 'FPM for Chef'
 license 'Apache 2.0'
 
-version '0.1.3'
+version '0.1.4'
 
 recommends 'reprepro'
 recommends 'repository'

@@ -9,6 +9,14 @@ def load_current_resource
   if(node[:fpm_tng][:bundle][:enable])
     node.set[:fpm_tng][:exec] = ::File.join(node[:fpm_tng][:bundle][:directory], 'bin/fpm')
   end
+  # Use default from node attribute if node attribute is set
+  %w(vendor maintainer).each do |k|
+    unless(new_resource.send(k))
+      if(node[:fpm_tng][k])
+        new_resource.send(k, node[:fpm_tng][k])
+      end
+    end
+  end
 end
 
 action :create do

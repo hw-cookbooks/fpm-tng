@@ -13,10 +13,12 @@ action :create do
     raise "Failed to locate requested gem for dependency building: #{args.join(' - ')}"
   end
   resource_generator = lambda do |base_spec|
+    all_deps = []
     base_spec.runtime_dependencies.each do |dep|
+      dep_res = []
       spec = dep_installer.find_gems_with_sources(dep).last.first
       deps = spec.runtime_dependencies.map do |s|
-        resource_generator.call(dep_installer.find_gems_with_sources(s).last.first)
+        dep_res = resource_generator.call(dep_installer.find_gems_with_sources(s).last.first)
       end
 
       s_name = [new_resource.gem_package_name_prefix, new_resource.package_name_suffix, spec.name].compact.join('-')
@@ -29,6 +31,7 @@ action :create do
         gem_fix_name false
         input_args spec.name
         version spec.version.to_s
+        depends dep_res.map(&:first) unless dep_res.empty?
         (FpmTng::STRINGS + FpmTng::NUMERICS + FpmTng::STRING_ARRAYS + FpmTng::TRUE_FALSE).each do |attr|
           next if ignore_attrs.include?(attr)
           if(new_resource.send(attr))
@@ -38,9 +41,13 @@ action :create do
       end
       f.run_action(:create)
       updated ||= f.updated_by_last_action?
-      [spec.name, spec.version]
+      all_deps += [[s_name, spec.version]] + dep_res
     end
+    all_deps
   end
-  resource_generator.call(base)
+  dependencies = resource_generator.call(base)
+  new_resource.generated_dependencies(
+    dependencies.map(&:first) # TODO: Need to think more about version restrictions
+  )
   new_resource.updated_by_last_action(updated)
 end

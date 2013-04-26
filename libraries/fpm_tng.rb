@@ -1,4 +1,8 @@
+require 'chef/mixin/shell_out'
+
 module FpmTng
+  extend Chef::Mixin::ShellOut
+
   STRINGS = %w(
     prefix license vendor category architecture maintainer
     package_name_suffix description url inputs before_install
@@ -21,4 +25,14 @@ module FpmTng
     deb_ignore_iteration_in_dependencies python_fix_name
     python_fix_dependencies pear_channel_update auto_depends
   )
+
+  def self.fpm_exec_path(node)
+    bindir = gem_bindir(node)
+    bindir.empty? ? 'fpm' : File.join(bindir, 'fpm')
+  end
+
+  def self.gem_bindir(node)
+    cmd = 'require "rubygems"; puts Gem.default_bindir'
+    shell_out(node[:languages][:ruby][:ruby_bin], '-e', cmd).stdout.chomp
+  end
 end

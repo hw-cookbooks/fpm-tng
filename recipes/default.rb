@@ -1,11 +1,11 @@
-node.default[:fpm_tng][:exec] = File.join(node[:languages][:ruby][:bin_dir], 'fpm')
+node.default[:fpm_tng][:exec] = FpmTng.fpm_exec_path(node)
 node.default[:fpm_tng][:gem] = node[:languages][:ruby][:gem_bin]
 
 begin
   resources(:ohai => 'ruby')
   ruby_block 'Reset ruby defaults' do
     block do
-      node.default[:fpm_tng][:exec] = File.join(node[:languages][:ruby][:bin_dir], 'fpm')
+      node.default[:fpm_tng][:exec] = FpmTng.fpm_exec_path(node)
       node.default[:fpm_tng][:gem] = File.join(node[:languages][:ruby][:bin_dir], 'gem')
     end
     action :nothing

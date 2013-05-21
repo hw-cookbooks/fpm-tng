@@ -8,3 +8,6 @@ version '0.1.5'
 
 recommends 'reprepro'
 recommends 'repository'
+recommends 'ruby_installer'
+
+depends 'delayed_evaluator'

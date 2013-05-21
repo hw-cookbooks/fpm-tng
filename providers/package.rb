@@ -30,7 +30,7 @@ action :create do
 
     [FpmTng::STRINGS, FpmTng::NUMERICS].flatten.compact.each do |str|
       if(new_resource.send(str))
-        string = new_resource.send(str)
+        string = new_resource.send(str).to_s
         string = "\"#{string}\"" if string.include?(' ')
         fpm << "--#{str.gsub('_', '-')} #{string}"
       end
@@ -47,7 +47,7 @@ action :create do
     FpmTng::TRUE_FALSE.each do |bool|
       if(new_resource.send(bool))
         fpm << "--#{bool.gsub('_', '-')}"
-      elsif(new_resource == false)
+      elsif(new_resource.send(bool) == false)
         fpm << "--no-#{bool.gsub('_', '-')}"
       end
     end

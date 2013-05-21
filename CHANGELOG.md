@@ -1,3 +1,8 @@
+## v0.1.6
+* Set default paths in attribute only if language info is available (thanks @baldur)
+* Set default paths during compile phase to provide option for compile time install of custom Ruby (thanks @tmatilai)
+* Turn off bundle usage by default
+
 ## v0.1.4
 * Add some missing fpm options
 * Let gemdeps LWRP do dependency resolution to provide proper package names

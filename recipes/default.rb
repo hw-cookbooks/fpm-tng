@@ -18,7 +18,7 @@ end
 unless(node[:fpm_tng][:bundle][:enable])
   node[:fpm_tng][:install][:gems].each do |fpm_gem|
     gem_package fpm_gem do
-      gem_binary lazy{ node[:fpm_tng][:gem] }
+      gem_binary node[:fpm_tng][:gem]
     end
   end
 else

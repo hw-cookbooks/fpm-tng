@@ -1,16 +1,5 @@
-begin
-  resources(:ohai => 'ruby')
-  ruby_block 'Reset ruby defaults' do
-    block do
-      node.default[:fpm_tng][:exec] = File.join(node.languages.ruby.bin_dir, 'fpm')
-      node.default[:fpm_tng][:gem] = File.join(node.languages.ruby.bin_dir, 'gem')
-    end
-    action :nothing
-    subscribes :create, 'ohai[ruby]', :immediately
-  end
-rescue Chef::Exceptions::ResourceNotFound
-  Chef::Log.warn 'No ohai ruby reload found.'
-end
+node.default[:fpm_tng][:exec] = File.join(node.languages.ruby.bin_dir, 'fpm')
+node.default[:fpm_tng][:gem] = node.languages.ruby.gem_bin
 
 unless(node[:fpm_tng][:bundle][:enable])
   node[:fpm_tng][:install][:gems].each do |fpm_gem|

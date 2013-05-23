@@ -9,9 +9,9 @@ module FpmTng
     rpm_digest rpm_compression rpm_os rpm_changelog python_bin
     python_easyinstall python_pip python_pypi python_package_name_prefix
     python_install_bin python_install_lib python_install_data
-    pear_package_name_prefix pear_channel version package
+    pear_package_name_prefix pear_channel version iteration package
   )
-  NUMERICS = %w(iteration epoch)
+  NUMERICS = %w(epoch)
   STRING_ARRAYS = %w(
     depends provides conflicts replaces config_files directories exclude
     template_value deb_pre_depends

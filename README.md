@@ -29,9 +29,11 @@ end
 
 Most times gems will requre dependencies. These can be autobuilt:
 
+```ruby
 fpm_tng_gemdeps 'rails' do
   version '3.2.6'
 end
+```
 
 ## Attributes
 

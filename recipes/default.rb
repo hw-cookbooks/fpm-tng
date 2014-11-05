@@ -6,7 +6,7 @@ begin
   ruby_block 'Reset ruby defaults' do
     block do
       node.default[:fpm_tng][:exec] = File.join(node[:languages][:ruby][:bin_dir], 'fpm')
-      node.default[:fpm_tng][:gem] = File.join(node[:languages][:ruby][:bin_dir], 'gem')
+      node.default[:fpm_tng][:gem] = node[:languages][:ruby][:gem_bin]
     end
     action :nothing
     subscribes :create, 'ohai[ruby]', :immediately

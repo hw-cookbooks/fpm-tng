@@ -10,15 +10,15 @@ module FpmTng
     python_easyinstall python_pip python_pypi python_package_name_prefix
     python_install_bin python_install_lib python_install_data
     pear_package_name_prefix pear_channel version package
-  )
-  NUMERICS = %w(iteration epoch)
+  ).freeze
+  NUMERICS = %w(iteration epoch).freeze
   STRING_ARRAYS = %w(
     depends provides conflicts replaces config_files directories exclude
     template_value deb_pre_depends
-  )
+  ).freeze
   TRUE_FALSE = %w(
-    template_scripts gem_fix_name gem_fix_dependencies 
+    template_scripts gem_fix_name gem_fix_dependencies
     deb_ignore_iteration_in_dependencies python_fix_name
     python_fix_dependencies pear_channel_update auto_depends
-  )
+  ).freeze
 end

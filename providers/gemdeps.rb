@@ -1,15 +1,14 @@
 
 action :create do
-
   ignore_attrs = %w(input_type output_type version input_args gem_fix_name)
-  
+
   require 'rubygems/dependency_installer'
   args = [new_resource.name, new_resource.version].compact
   dep_installer = Gem::DependencyInstaller.new
   base = dep_installer.find_spec_by_name_and_version(*args).flatten.first
   pk_list = []
   updated = false
-  unless(base)
+  unless base
     raise "Failed to locate requested gem for dependency building: #{args.join(' - ')}"
   end
   resource_generator = lambda do |base_spec|
@@ -34,8 +33,8 @@ action :create do
         depends dep_res.map(&:first) unless dep_res.empty?
         (FpmTng::STRINGS + FpmTng::NUMERICS + FpmTng::STRING_ARRAYS + FpmTng::TRUE_FALSE).each do |attr|
           next if ignore_attrs.include?(attr)
-          if(new_resource.send(attr))
-            self.send(attr, new_resource.send(attr))
+          if new_resource.send(attr)
+            send(attr, new_resource.send(attr))
           end
         end
       end
